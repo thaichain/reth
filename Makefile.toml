@@ -1,0 +1,112 @@
+[config]
+skip_core_tasks = true
+
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+RUSTFLAGS = "-D warnings"
+
+# default
+# test
+# - doctest
+# - unittest
+# bench
+# lint
+# - clippy-check
+# - fmt-check
+# - deny-check
+# coverage
+# ci-test-flow
+# ci-lint-flow
+# ci-coverage-flow
+# book test
+# book build
+# ci-book-flow
+
+[tasks.default]
+alias = "dev-flow"
+
+[tasks.dev-flow]
+description = "The development flow will first lint the code, then build it and run the tests."
+category = "Development"
+dependencies = [
+    "lint-flow",
+    "build",
+    "test-flow"
+]
+
+[tasks.lint-flow]
+description = "The lint flow will run clippy and rustfmt in check mode."
+category = "Lint"
+dependencies = [
+    "check-fmt",
+    "check-clippy"
+]
+
+[tasks.check-fmt]
+description = "Runs rustfmt in check mode."
+category = "Lint"
+command = "cargo"
+args = [
+    "fmt",
+    "--check"
+]
+
+[tasks.check-clippy]
+description = "Runs clippy."
+category = "Lint"
+command = "cargo"
+args = [
+    "clippy",
+    "--all-features"
+]
+
+[tasks.build]
+description = "Runs the rust compiler."
+category = "Build"
+install_crate = false
+command = "cargo"
+args = [
+    "build"
+]
+
+[tasks.test-flow]
+description = "The test flow will run all available tests."
+category = "Test"
+dependencies = ["test-doc", "test"]
+
+[tasks.test-doc]
+description = "Runs doctests."
+category = "Test"
+command = "cargo"
+args = [
+    "test",
+    "--doc",
+    "--all-features"
+]
+
+[tasks.test]
+description = "Runs unit tests."
+category = "Test"
+command = "cargo-nextest"
+args = [
+    "nextest",
+    "run",
+    "--all-features"
+]
+
+[tasks.llvm-cov]
+command = "cargo"
+args = [
+    "llvm-cov",
+    "nextest",
+    "--locked",
+    "--all-features",
+    "--all",
+    "--lcov",
+    "--output-path",
+    "lcov.info"
+]
+workspace = false
+
+# CARGO_MAKE_TASK_ARGS - args sep by ;
+#
