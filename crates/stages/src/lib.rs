@@ -4,6 +4,7 @@
     no_crate_inject,
     attr(deny(warnings, rust_2018_idioms), allow(dead_code, unused_variables))
 ))]
+#![feature(test)]
 //! Staged syncing primitives for reth.
 //!
 //! See [Stage] and [Pipeline].
@@ -21,6 +22,8 @@ mod pipeline;
 mod stage;
 mod util;
 
+#[cfg(test)]
+mod bench;
 #[cfg(test)]
 mod test_utils;
 
