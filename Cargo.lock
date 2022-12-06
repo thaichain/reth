@@ -3196,6 +3196,7 @@ dependencies = [
  "serde",
  "smol_str",
  "snap",
+ "test-fuzz",
  "thiserror",
  "tokio",
  "tokio-stream",
